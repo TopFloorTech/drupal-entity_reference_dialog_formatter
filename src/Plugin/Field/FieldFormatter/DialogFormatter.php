@@ -40,7 +40,17 @@ class DialogFormatter extends FormatterBase {
       ]
     ];
 
-    $dialogOptions = [];
+    $class = 'entity-reference-dialog';
+    if (isset($items[0]->entity)) {
+      /** @var EntityInterface $entity */
+      $entity = $items[0]->entity;
+
+      $class .= ' entity-reference-dialog--' . $entity->getEntityTypeId();
+    }
+
+    $dialogOptions = [
+      'dialogClass' => $class
+    ];
     $width = $this->getSetting('dialog_width');
 
     if ($width) {

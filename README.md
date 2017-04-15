@@ -1,9 +1,18 @@
-ABOUT
-=====
+**SUMMARY**
 
-Formats an entity reference field as a link which opens the entity in a dialog.
+This is a very simple formatter for any Entity Reference field which allows you to render it as a link which opens the referenced entity in a jQuery UI modal (utilizing Drupal Core's libraries).
 
-DEPENDENCIES
-============
+You can customize the link text and the dialog window options.
 
-- Entity Reference
+**REQUIREMENTS**
+
+* Entity Reference
+
+**INSTALLATION**
+
+Install as usual, see http://drupal.org/node/1897420 for further information.
+
+**CONTACT**
+
+Current maintainers:
+* [bmcclure](https://www.drupal.org/user/278485)

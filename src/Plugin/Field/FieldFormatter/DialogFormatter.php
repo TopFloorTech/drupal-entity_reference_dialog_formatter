@@ -3,15 +3,12 @@
 namespace Drupal\entity_reference_dialog_formatter\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Annotation\Translation;
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\Annotation\FieldFormatter;
-use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 
 /**
  * Plugin implementation of the 'dialog' formatter.
@@ -79,14 +76,6 @@ class DialogFormatter extends FormatterBase {
     return $element;
   }
 
-  protected function getTitle(EntityInterface $entity) {
-    if ($this->getSetting('use_entity_label')) {
-      return $entity->label();
-    }
-
-    return $this->getSetting('link_title');
-  }
-
   /**
    * {@inheritdoc}
    */
@@ -151,5 +140,22 @@ class DialogFormatter extends FormatterBase {
     $summary[] = $this->t("Dialog width: $width");
 
     return $summary;
+  }
+
+  /**
+   * Get the correct title value to use for this reference.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity.
+   *
+   * @return string
+   *   The title.
+   */
+  protected function getTitle(EntityInterface $entity) {
+    if ($this->getSetting('use_entity_label')) {
+      return $entity->label();
+    }
+
+    return $this->getSetting('link_title');
   }
 }

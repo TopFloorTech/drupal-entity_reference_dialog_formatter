@@ -32,9 +32,9 @@ class DialogFormatter extends FormatterBase {
       '#attached' => [
         'library' => [
           'core/drupal.ajax',
-          'core/jquery.ui.dialog'
+          'core/jquery.ui.dialog',
         ],
-      ]
+      ],
     ];
 
     $class = 'entity-reference-dialog';
@@ -46,7 +46,7 @@ class DialogFormatter extends FormatterBase {
     }
 
     $dialogOptions = [
-      'dialogClass' => $class
+      'dialogClass' => $class,
     ];
     $width = $this->getSetting('dialog_width');
 
@@ -111,6 +111,7 @@ class DialogFormatter extends FormatterBase {
       '#type' => 'textfield',
       '#title' => $this->t('Dialog width'),
       '#description' => $this->t('Enter a width value, or leave blank for automatic width.'),
+      '#default_value' => $this->getSetting('dialog_width'),
     ];
 
     return $element;

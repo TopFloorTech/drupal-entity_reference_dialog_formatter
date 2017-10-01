@@ -28,28 +28,9 @@ class DialogFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-    $element = [
-      '#attached' => [
-        'library' => [
-          'core/drupal.ajax',
-          'core/jquery.ui.dialog',
-        ],
-      ],
-    ];
-
-    $class = 'entity-reference-dialog';
-    if (isset($items[0]->entity)) {
-      /** @var EntityInterface $entity */
-      $entity = $items[0]->entity;
-
-      $class .= ' entity-reference-dialog--' . $entity->getEntityTypeId();
-    }
-
-    $dialogOptions = [
-      'dialogClass' => $class,
-    ];
+    $element = [];
+    $dialogOptions = [];
     $width = $this->getSetting('dialog_width');
-
     if ($width) {
       $dialogOptions['width'] = $width;
     }
@@ -60,16 +41,7 @@ class DialogFormatter extends FormatterBase {
         /** @var EntityInterface $entity */
         $entity = $item->entity;
 
-        $element[] = [
-          '#type' => 'link',
-          '#attributes' => [
-            'class' => 'use-ajax',
-            'data-dialog-type' => 'modal',
-            'data-dialog-options' => json_encode($dialogOptions),
-          ],
-          '#title' => $this->getTitle($entity),
-          '#url' => $entity->toUrl('canonical'),
-        ];
+        $element[] = entity_reference_dialog_formatter_link($this->getTitle($entity), $entity->getEntityTypeId(), $entity->id(), 'full', $dialogOptions);
       }
     }
 
@@ -111,7 +83,6 @@ class DialogFormatter extends FormatterBase {
       '#type' => 'textfield',
       '#title' => $this->t('Dialog width'),
       '#description' => $this->t('Enter a width value, or leave blank for automatic width.'),
-      '#default_value' => $this->getSetting('dialog_width'),
     ];
 
     return $element;
@@ -121,23 +92,18 @@ class DialogFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $summary = [];
-
-    $summary[] = $this->t('Renders the field as a Dialog link.');
-
     $useEntityLabel = $this->getSetting('use_entity_label');
-
-    $summary[] = $useEntityLabel ? 'Using the entity label' : 'Using the specified title';
-
-    if (!$useEntityLabel) {
-      $summary[] = $this->t('Link title: ') . $this->getSetting('link_title');
-    }
-
     $width = $this->getSetting('dialog_width');
     if (!$width) {
       $width = 'auto';
     }
 
+    $summary = [];
+    $summary[] = $this->t('Renders the field as a Dialog link.');
+    $summary[] = $useEntityLabel ? 'Using the entity label' : 'Using the specified title';
+    if (!$useEntityLabel) {
+      $summary[] = $this->t('Link title: ') . $this->getSetting('link_title');
+    }
     $summary[] = $this->t("Dialog width: $width");
 
     return $summary;

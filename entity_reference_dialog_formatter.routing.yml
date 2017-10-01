@@ -2,7 +2,8 @@ entity_reference_dialog_formatter.render:
   path: '/entity_reference_dialog_formatter/{entity_type}/{entity}/{view_mode}'
   defaults:
     _controller: '\Drupal\entity_reference_dialog_formatter\Controller\EntityRenderer::render'
-    _title: 'Edit facet source configuration'
+    _title: 'Entity View'
+    view_mode: 'full'
   requirements:
     _entity_access: 'entity.view'
   options:

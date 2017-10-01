@@ -30,9 +30,8 @@ class DialogFormatter extends FormatterBase {
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $element = [];
     $dialogOptions = [];
-    $width = $this->getSetting('dialog_width');
-    if ($width) {
-      $dialogOptions['width'] = $width;
+    if ($this->getSetting('dialog_width')) {
+      $dialogOptions['width'] = $this->getSetting('dialog_width');
     }
 
     /** @var EntityReferenceItem $item */

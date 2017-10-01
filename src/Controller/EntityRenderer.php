@@ -12,16 +12,16 @@ class EntityRenderer extends ControllerBase {
    *
    * @param EntityInterface $entity
    *   The entity being forwarded.
-   * @param string $viewMode
+   * @param string $view_mode
    *   The view mode to use, with "full" being the default value.
    *
    * @return array
    *   The render array for the entity.
    */
-  public function render(EntityInterface $entity, $viewMode = 'full') {
+  public function render(EntityInterface $entity, $view_mode = 'full') {
     $viewBuilder = \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId());
     $langcode = \Drupal::languageManager()->getLanguage(Language::TYPE_CONTENT);
-    $output = $viewBuilder->view($entity, $viewMode, $langcode);
+    $output = $viewBuilder->view($entity, $view_mode, $langcode);
     return $output;
   }
 }

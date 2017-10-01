@@ -24,4 +24,17 @@ class EntityRenderer extends ControllerBase {
     $output = $viewBuilder->view($entity, $view_mode, $langcode);
     return $output;
   }
+
+  /**
+   * The _title_callback for the modal.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity.
+   *
+   * @return string
+   *   The page title.
+   */
+  public function title(EntityInterface $entity) {
+    return \Drupal::service('entity.repository')->getTranslationFromContext($entity)->label();
+  }
 }

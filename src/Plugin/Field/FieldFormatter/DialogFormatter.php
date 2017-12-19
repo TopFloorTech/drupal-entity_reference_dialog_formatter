@@ -122,6 +122,6 @@ class DialogFormatter extends FormatterBase {
       return $entity->label();
     }
 
-    return $this->getSetting('link_title');
+    return $this->t($this->getSetting('link_title'));
   }
 }

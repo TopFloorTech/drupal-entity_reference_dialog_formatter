@@ -3,12 +3,14 @@
 namespace Drupal\entity_reference_dialog_formatter\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Annotation\Translation;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\Annotation\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
 
 /**
  * Plugin implementation of the 'dialog' formatter.
@@ -40,7 +42,7 @@ class DialogFormatter extends FormatterBase {
         /** @var EntityInterface $entity */
         $entity = $item->entity;
 
-        $element[] = entity_reference_dialog_formatter_link($this->getTitle($entity), $entity->getEntityTypeId(), $entity->id(), 'full', $dialogOptions);
+        $element[] = entity_reference_dialog_formatter_link($this->getTitle($entity, $langcode), $entity->getEntityTypeId(), $entity->id(), 'full', $dialogOptions);
       }
     }
 
@@ -114,11 +116,22 @@ class DialogFormatter extends FormatterBase {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity.
    *
+   * @param string $langcode
+   *   The langcode.
+   *
    * @return string
    *   The title.
    */
-  protected function getTitle(EntityInterface $entity) {
+  protected function getTitle(EntityInterface $entity, $langcode) {
     if ($this->getSetting('use_entity_label')) {
+      if ($entity instanceof ContentEntityInterface) {
+        if (NULL === $langcode) {
+          $langcode = LanguageInterface::LANGCODE_DEFAULT;
+        }
+
+        return $entity->getTranslation($langcode)->label();
+      }
+
       return $entity->label();
     }
 

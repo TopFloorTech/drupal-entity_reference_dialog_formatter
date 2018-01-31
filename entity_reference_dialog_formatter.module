@@ -17,7 +17,7 @@ function entity_reference_dialog_formatter_link($title, $entity_type, $id, $view
     ]
   ];
 
-  $link = \Drupal\Core\Link::createFromRoute(t($title), $route, $parameters, $options);
+  $link = \Drupal\Core\Link::createFromRoute($title, $route, $parameters, $options);
 
   $build = $link->toRenderable();
   $build['#attached'] = [

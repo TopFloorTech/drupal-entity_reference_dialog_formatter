@@ -4,7 +4,8 @@ namespace Drupal\entity_reference_dialog_formatter\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Language\Language;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Language\LanguageInterface;
 
 class EntityRenderer extends ControllerBase {
   /**
@@ -20,9 +21,8 @@ class EntityRenderer extends ControllerBase {
    */
   public function render(EntityInterface $entity, $view_mode = 'full') {
     $viewBuilder = \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId());
-    $langcode = \Drupal::languageManager()->getLanguage(Language::TYPE_CONTENT);
-    $output = $viewBuilder->view($entity, $view_mode, $langcode);
-    return $output;
+    $langcode = \Drupal::languageManager()->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+    return $viewBuilder->view($entity, $view_mode, $langcode);
   }
 
   /**
@@ -34,7 +34,17 @@ class EntityRenderer extends ControllerBase {
    * @return string
    *   The page title.
    */
-  public function title(EntityInterface $entity) {
-    return \Drupal::service('entity.repository')->getTranslationFromContext($entity)->label();
+  public function title(EntityInterface $entity, $view_mode = 'full') {
+    /** @var EntityRepositoryInterface $entityRepository */
+    $entityRepository = \Drupal::service('entity.repository');
+    $langcode = \Drupal::languageManager()->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+    $entity = $entityRepository->getTranslationFromContext($entity, $langcode);
+    $title = $entity->label();
+
+    if (\is_string($title) && $entity->language() !== $langcode) {
+      $title = $this->t($title);
+    }
+
+    return $title;
   }
 }

@@ -3,14 +3,13 @@
 namespace Drupal\entity_reference_dialog_formatter\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Annotation\Translation;
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Field\Annotation\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Language\LanguageInterface;
 
 /**
  * Plugin implementation of the 'dialog' formatter.
@@ -124,17 +123,13 @@ class DialogFormatter extends FormatterBase {
    */
   protected function getTitle(EntityInterface $entity, $langcode) {
     if ($this->getSetting('use_entity_label')) {
-      if ($entity instanceof ContentEntityInterface) {
-        if (NULL === $langcode) {
-          $langcode = LanguageInterface::LANGCODE_DEFAULT;
-        }
-
-        return $entity->getTranslation($langcode)->label();
-      }
-
-      return $entity->label();
+      /** @var EntityRepositoryInterface $entityRepository */
+      $entityRepository = \Drupal::service('entity.repository');
+      $title = $entityRepository->getTranslationFromContext($entity, $langcode)->label();
+    } else {
+      $title = $this->t($this->getSetting('link_title'));
     }
 
-    return $this->t($this->getSetting('link_title'));
+    return $title;
   }
 }

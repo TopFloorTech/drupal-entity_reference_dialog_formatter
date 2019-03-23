@@ -83,6 +83,7 @@ class DialogFormatter extends FormatterBase {
       '#type' => 'textfield',
       '#title' => $this->t('Dialog width'),
       '#description' => $this->t('Enter a width value, or leave blank for automatic width.'),
+      '#default_value' => $this->getSetting('dialog_width'),
     ];
 
     return $element;
